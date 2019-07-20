@@ -28,7 +28,6 @@ namespace FrequencyPairChars.SupportClasses
 
         private void UpdateFrequencies()
         {
-            _frequencies.OrderBy(x => x.Value).Select(x => x.Key);
             foreach (KeyValuePair<string, int> item in _frequencies)
             {
                 frequencyCounter.Append($"{item.Key} {item.Value}{Environment.NewLine}");
@@ -55,16 +54,20 @@ namespace FrequencyPairChars.SupportClasses
                 {
                     string actualSyllable = ($"{text[i]}{text[i + 1]}");
 
-                    syllables.Append($"{actualSyllable}{Environment.NewLine}");                    
+                    syllables.Append($"{actualSyllable}{Environment.NewLine}");
 
-                    if (_frequencies.ContainsKey(actualSyllable))
-                    {
-                        _frequencies[actualSyllable]++;
-                    }
-                    else
-                    {
-                        _frequencies[actualSyllable] = 1;
-                    }
+                    _frequencies[actualSyllable] = (_frequencies.ContainsKey(actualSyllable))
+                        ? _frequencies[actualSyllable] + 1
+                        : 1;
+
+                    //if (_frequencies.ContainsKey(actualSyllable))
+                    //{
+                    //    _frequencies[actualSyllable]++;
+                    //}
+                    //else
+                    //{
+                    //    _frequencies[actualSyllable] = 1;
+                    //}
                 }
                 else
                 {

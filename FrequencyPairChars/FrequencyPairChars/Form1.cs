@@ -24,8 +24,7 @@ namespace FrequencyPairChars
         private void BtnManualText_Click(object sender, EventArgs e)
         {
             frequencyAnalyzer.AnalyzeText(TxtManualText.Text);
-            TxtManualText.Text = string.Empty;
-            TxtManualText.Text = frequencyAnalyzer.frequencyCounter.ToString();
+            TxtFrequencies.Text = frequencyAnalyzer.frequencyCounter.ToString();
         }
     }
 }
