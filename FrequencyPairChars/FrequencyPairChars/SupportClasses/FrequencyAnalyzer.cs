@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Linq;
 
 namespace FrequencyPairChars.SupportClasses
 {
     public class FrequencyAnalyzer
     {
+        private const double HUNDRED = 100.00;
         private string _text;
         private Dictionary<string, int> _frequencies;
         public StringBuilder syllables;
@@ -16,6 +16,14 @@ namespace FrequencyPairChars.SupportClasses
         public FrequencyAnalyzer()
         {
             _frequencies = new Dictionary<string, int>();
+        }
+
+        public void Reset()
+        {
+            _text = string.Empty;
+            syllables.Clear();
+            frequencyCounter.Clear();
+            _frequencies.Clear();
         }
 
         public void AnalyzeText(string text)
@@ -28,9 +36,24 @@ namespace FrequencyPairChars.SupportClasses
 
         private void UpdateFrequencies()
         {
-            foreach (KeyValuePair<string, int> item in _frequencies)
+            int counter = 0;
+
+            var orderedFrequencies = from pair in _frequencies
+                       orderby pair.Value descending
+                       select pair;
+
+            frequencyCounter.AppendLine("Syllable \t Qty. \t   %");
+            foreach (KeyValuePair<string, int> item in orderedFrequencies)
             {
-                frequencyCounter.Append($"{item.Key} {item.Value}{Environment.NewLine}");
+                if (counter < HUNDRED)
+                {
+                    frequencyCounter.AppendLine($"{item.Key} \t {item.Value} \t {(item.Value * HUNDRED) / _frequencies.Count}%");
+                    counter++;
+                }
+                else
+                {
+                    break;
+                }
             }
         }
 
@@ -47,27 +70,19 @@ namespace FrequencyPairChars.SupportClasses
         {
             syllables = new StringBuilder();
             frequencyCounter = new StringBuilder();
+            string actualSyllable;
 
             for (int i = 0; i < text.Length-1; i++)
             {
                 if(text[i] != ' ' && text[i + 1] != ' ')
                 {
-                    string actualSyllable = ($"{text[i]}{text[i + 1]}");
+                    actualSyllable = ($"{text[i]}{text[i + 1]}");
 
                     syllables.Append($"{actualSyllable}{Environment.NewLine}");
 
                     _frequencies[actualSyllable] = (_frequencies.ContainsKey(actualSyllable))
                         ? _frequencies[actualSyllable] + 1
                         : 1;
-
-                    //if (_frequencies.ContainsKey(actualSyllable))
-                    //{
-                    //    _frequencies[actualSyllable]++;
-                    //}
-                    //else
-                    //{
-                    //    _frequencies[actualSyllable] = 1;
-                    //}
                 }
                 else
                 {
